@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Confirmar Exclusão - {{ party.name }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h5 class="alert-heading">
+                            <i class="fas fa-exclamation-triangle"></i> Atenção!
+                        </h5>
+                        <p class="mb-0">
+                            Você está prestes a excluir a parte <strong>"{{ party.name }}"</strong>.
+                        </p>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h6 class="mb-0">Detalhes da Parte</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Nome:</strong> {{ party.name }}</p>
+                                    <p><strong>Categoria:</strong> {{ party.get_category_display }}</p>
+                                    <p><strong>Documento:</strong> {{ party.formatted_document|default:"Não informado" }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Telefone:</strong> {{ party.phone|default:"Não informado" }}</p>
+                                    <p><strong>E-mail:</strong> {{ party.email|default:"Não informado" }}</p>
+                                    <p><strong>Processo:</strong> {{ party.process.process_number }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="fas fa-info-circle"></i> Informação
+                        </h6>
+                        <p class="mb-0">
+                            Esta parte está relacionada ao processo <strong>{{ party.process.process_number }}</strong>.
+                            A exclusão da parte removerá a associação com o processo.
+                        </p>
+                    </div>
+                    
+                    <div class="alert alert-danger">
+                        <h6 class="alert-heading">
+                            <i class="fas fa-exclamation-triangle"></i> Ação Irreversível
+                        </h6>
+                        <p class="mb-0">
+                            Esta ação não pode ser desfeita. Todos os dados da parte serão permanentemente removidos.
+                        </p>
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'parties:party_detail' party.pk %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Confirmar Exclusão
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Confirmação adicional
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+        if (!confirm('Tem certeza absoluta que deseja excluir esta parte? Esta ação não pode ser desfeita.')) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
+{% endblock %} 

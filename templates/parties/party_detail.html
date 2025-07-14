@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Detalhes da Parte - {{ party.name }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user"></i> Detalhes da Parte
+                    </h4>
+                    <div>
+                        <a href="{% url 'parties:party_update' party.pk %}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <a href="{% url 'parties:party_delete' party.pk %}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> Excluir
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="text-primary">Informações Básicas</h5>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Nome:</strong></td>
+                                    <td>{{ party.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Categoria:</strong></td>
+                                    <td>
+                                        <span class="badge bg-{% if party.category == 'AUTOR' %}success{% elif party.category == 'RÉU' %}danger{% elif party.category == 'TERCEIRO' %}warning{% else %}secondary{% endif %}">
+                                            {{ party.get_category_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Documento:</strong></td>
+                                    <td>{{ party.formatted_document|default:"Não informado" }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Telefone:</strong></td>
+                                    <td>{{ party.phone|default:"Não informado" }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-primary">Contato</h5>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>E-mail:</strong></td>
+                                    <td>
+                                        {% if party.email %}
+                                            <a href="mailto:{{ party.email }}">{{ party.email }}</a>
+                                        {% else %}
+                                            Não informado
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Processo:</strong></td>
+                                    <td>
+                                        <a href="{% url 'processes:process_detail' party.process.pk %}">
+                                            {{ party.process.process_number }}
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tipo:</strong></td>
+                                    <td>
+                                        {% if party.is_individual %}
+                                            <span class="badge bg-info">Pessoa Física</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Pessoa Jurídica</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Criado em:</strong></td>
+                                    <td>{{ party.created_at|date:"d/m/Y H:i" }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between">
+                                <a href="{% url 'parties:party_list' %}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Voltar à Lista
+                                </a>
+                                <div>
+                                    <a href="{% url 'parties:party_update' party.pk %}" class="btn btn-warning">
+                                        <i class="fas fa-edit"></i> Editar Parte
+                                    </a>
+                                    <a href="{% url 'parties:party_delete' party.pk %}" class="btn btn-danger">
+                                        <i class="fas fa-trash"></i> Excluir Parte
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Adicionar confirmação para exclusão
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtons = document.querySelectorAll('.btn-danger');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            if (!confirm('Tem certeza que deseja excluir esta parte? Esta ação não pode ser desfeita.')) {
+                e.preventDefault();
+            }
+        });
+    });
+});
+</script>
+{% endblock %} 

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalhes do Processo{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Detalhes do Processo</h2>
+    <hr>
+    <table class="table table-bordered">
+        <tr>
+            <th>Número do Processo</th>
+            <td>{{ process.process_number }}</td>
+        </tr>
+        <tr>
+            <th>Vara</th>
+            <td>{{ process.court }}</td>
+        </tr>
+        <tr>
+            <th>Assunto</th>
+            <td>{{ process.subject }}</td>
+        </tr>
+        <tr>
+            <th>Data de Criação</th>
+            <td>{{ process.created_at|date:'d/m/Y H:i' }}</td>
+        </tr>
+        <tr>
+            <th>Última Atualização</th>
+            <td>{{ process.updated_at|date:'d/m/Y H:i' }}</td>
+        </tr>
+        <!-- Adicione outros campos relevantes aqui -->
+    </table>
+    <a href="{% url 'processes:process_list' %}" class="btn btn-secondary">Voltar</a>
+    <a href="{% url 'processes:process_update' process.pk %}" class="btn btn-primary">Editar</a>
+    <a href="{% url 'processes:process_delete' process.pk %}" class="btn btn-danger">Excluir</a>
+</div>
+{% endblock %} 

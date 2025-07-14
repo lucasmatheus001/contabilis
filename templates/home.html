@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}Sistema de Gerenciamento de Processos Jurídicos{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <h1 class="display-4 text-primary">
+                    <i class="fas fa-balance-scale me-3"></i>
+                    Sistema de Gerenciamento de Processos Jurídicos
+                </h1>
+                <p class="lead text-muted">
+                    Gerencie seus processos jurídicos de forma eficiente e organizada
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-gavel fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Processos Jurídicos</h5>
+                            <p class="card-text">
+                                Cadastre, visualize e gerencie todos os seus processos jurídicos
+                                de forma centralizada e organizada.
+                            </p>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'processes:process_list' %}" class="btn btn-primary">
+                                    <i class="fas fa-list me-2"></i>
+                                    Ver Processos
+                                </a>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="btn btn-primary">
+                                    <i class="fas fa-sign-in-alt me-2"></i>
+                                    Fazer Login
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-users fa-3x text-success mb-3"></i>
+                            <h5 class="card-title">Partes Envolvidas</h5>
+                            <p class="card-text">
+                                Gerencie as partes envolvidas nos processos, incluindo
+                                advogados, clientes e outros participantes.
+                            </p>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'parties:party_list' %}" class="btn btn-success">
+                                    <i class="fas fa-users me-2"></i>
+                                    Ver Partes
+                                </a>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="btn btn-success">
+                                    <i class="fas fa-sign-in-alt me-2"></i>
+                                    Fazer Login
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if user.is_authenticated %}
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-chart-bar me-2"></i>
+                                    Estatísticas Rápidas
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col-md-4">
+                                        <h3 class="text-primary">{{ processes_count|default:"0" }}</h3>
+                                        <p class="text-muted">Processos Cadastrados</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h3 class="text-success">{{ parties_count|default:"0" }}</h3>
+                                        <p class="text-muted">Partes Cadastradas</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h3 class="text-info">{{ active_processes_count|default:"0" }}</h3>
+                                        <p class="text-muted">Processos Ativos</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Funcionalidades do Sistema
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            Importação de dados de arquivos HTML
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            CRUD completo para processos e partes
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            Exportação para Excel
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            Sistema de autenticação seguro
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            Interface responsiva com Bootstrap 5
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            Busca e filtros avançados
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

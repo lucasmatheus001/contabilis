@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Logout - Sistema de Processos Jurídicos{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white text-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        Logout Realizado
+                    </h4>
+                </div>
+                <div class="card-body text-center">
+                    <p class="mb-4">
+                        Você foi desconectado com sucesso do sistema.
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'login' %}" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Fazer Login Novamente
+                        </a>
+                        <a href="{% url 'process_list' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-home me-2"></i>
+                            Voltar ao Início
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <small class="text-muted">
+                        Sistema de Gerenciamento de Processos Jurídicos
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
