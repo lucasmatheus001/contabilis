@@ -15,12 +15,12 @@ fake = Faker('pt_BR')
 PROCESS_STATUS_CHOICES = ['active', 'suspended', 'archived']
 PROCESS_TYPE_CHOICES = ['digital', 'physical']
 
-if Process.objects.exists():
+if Process.objects.exists():  # type: ignore
     print('Já existem processos cadastrados. Nada foi feito.')
     exit(0)
 
 for _ in range(60):
-    Process.objects.create(
+    Process.objects.create(  # type: ignore
         process_number=fake.unique.bothify(text='########-##.####.#.##.####'),
         status=choice(PROCESS_STATUS_CHOICES),
         process_type=choice(PROCESS_TYPE_CHOICES),

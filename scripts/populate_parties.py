@@ -23,17 +23,17 @@ def random_document():
     else:
         return fake.cnpj()
 
-if Party.objects.exists():
+if Party.objects.exists():  # type: ignore
     print('Já existem partes cadastradas. Nada foi feito.')
     exit(0)
 
-processos = list(Process.objects.all())
+processos = list(Process.objects.all())  # type: ignore
 if not processos:
     print('Nenhum processo encontrado. Execute o script de processos antes.')
     exit(1)
 
 for _ in range(60):
-    Party.objects.create(
+    Party.objects.create(  # type: ignore
         name=fake.name(),
         document=random_document(),
         category=choice(PARTY_CATEGORY_CHOICES),
