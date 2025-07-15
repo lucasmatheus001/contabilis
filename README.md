@@ -107,7 +107,25 @@ pytest
 # ou com cobertura:
 pytest --cov=processes --cov=parties
 ```
-```
+---
+## Aplicação
+<img width="1328" height="986" alt="image" src="https://github.com/user-attachments/assets/4100e6eb-6ea3-41e0-8124-127f98ac80e5" />
+
+https://github.com/user-attachments/assets/76a15b7f-b0a9-40cc-8d42-c92ccccc2799
+
+
+
+https://github.com/user-attachments/assets/06dd01ed-7248-461c-9714-6364abfd99ab
+
+
+
+## 🔑 Credenciais:
+web-1  |    Admin - Usuário: admin, Senha: admin123
+web-1  |    Normal - Usuário: usuario, Senha: usuario123
+
+
+
+
 
 ## Contribuição
 Caso queria contribuir com alterações sugestões so subir uma PR para ser analisada
