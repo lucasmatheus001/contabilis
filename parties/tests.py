@@ -2,6 +2,7 @@
 Tests for parties application.
 """
 
+import pytest
 from decimal import Decimal
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
@@ -15,7 +16,7 @@ class PartyModelTest(TestCase):
 
     def setUp(self):
         """Set up test data."""
-        self.process = Process.objects.create(
+        self.process = Process.objects.create( # type: ignore
             process_number='1004030-81.2016.0.00.0008',
             process_class='Execução de Título Extrajudicial',
             subject='Locação de Imóvel',
@@ -23,7 +24,7 @@ class PartyModelTest(TestCase):
             action_value=Decimal('5911.72'),
         )
         
-        self.party = Party.objects.create(
+        self.party = Party.objects.create( # type: ignore
             name='Eduardo Amoroso',
             document='564.406.360-73',
             category='EXEQUENTE',
@@ -51,7 +52,7 @@ class PartyModelTest(TestCase):
         self.assertTrue(self.party.is_individual)
         
         # CNPJ (14 digits) - company
-        company_party = Party.objects.create(
+        company_party = Party.objects.create( # type: ignore
             name='Banco Bandeira',
             document='10.261.482/0001-97',
             category='REQUERENTE',
@@ -65,7 +66,7 @@ class PartyModelTest(TestCase):
         self.assertEqual(self.party.formatted_document, '564.406.360-73')
         
         # CNPJ formatting
-        company_party = Party.objects.create(
+        company_party = Party.objects.create( # type: ignore
             name='Banco Bandeira',
             document='10.261.482/0001-97',
             category='REQUERENTE',
@@ -75,14 +76,14 @@ class PartyModelTest(TestCase):
 
     def test_party_ordering(self):
         """Test party ordering by name."""
-        party2 = Party.objects.create(
+        party2 = Party.objects.create( # type: ignore
             name='Ana Silva',
             document='123.456.789-00',
             category='EXECUTADA',
             process=self.process,
         )
         
-        parties = list(Party.objects.all())
+        parties = list(Party.objects.all()) # type: ignore
         self.assertEqual(parties[0], party2)  # Ana comes before Eduardo
 
 
@@ -96,14 +97,14 @@ class PartyViewsTest(TestCase):
             username='testuser',
             password='testpass123'
         )
-        self.process = Process.objects.create(
+        self.process = Process.objects.create( # type: ignore
             process_number='1004030-81.2016.0.00.0008',
             process_class='Execução de Título Extrajudicial',
             subject='Locação de Imóvel',
             judge='Mariana',
             action_value=Decimal('5911.72'),
         )
-        self.party = Party.objects.create(
+        self.party = Party.objects.create( # type: ignore
             name='Eduardo Amoroso',
             document='564.406.360-73',
             category='EXEQUENTE',
@@ -112,31 +113,31 @@ class PartyViewsTest(TestCase):
             process=self.process,
         )
 
-    def test_party_list_view_requires_login(self):
+    def test_party_list_view_requires_login(self): 
         """Test that party list requires login."""
         response = self.client.get(reverse('parties:party_list'))
-        self.assertEqual(response.status_code, 302)
-        self.assertIn('/accounts/login/', response.url)
+        self.assertEqual(response.status_code, 302) # type: ignore
+        self.assertIn('/accounts/login/', response.url) # type: ignore
 
     def test_party_list_view_with_login(self):
         """Test party list view with authenticated user."""
         self.client.login(username='testuser', password='testpass123')
         response = self.client.get(reverse('parties:party_list'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200) # type: ignore
         self.assertContains(response, 'Eduardo Amoroso')
 
     def test_party_detail_view(self):
         """Test party detail view."""
         self.client.login(username='testuser', password='testpass123')
         response = self.client.get(reverse('parties:party_detail', args=[self.party.pk]))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200) # type: ignore
         self.assertContains(response, 'Eduardo Amoroso')
 
     def test_party_create_view(self):
         """Test party create view."""
         self.client.login(username='testuser', password='testpass123')
         response = self.client.get(reverse('parties:party_create'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200) # type: ignore
 
     def test_party_create_post(self):
         """Test party creation via POST."""
@@ -150,14 +151,14 @@ class PartyViewsTest(TestCase):
             'process': self.process.pk,
         }
         response = self.client.post(reverse('parties:party_create'), data)
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(Party.objects.filter(name='Daniele Caldas').exists())
+        self.assertEqual(response.status_code, 302) # type: ignore
+        self.assertTrue(Party.objects.filter(name='Daniele Caldas').exists()) # type: ignore
 
     def test_party_update_view(self):
         """Test party update view."""
         self.client.login(username='testuser', password='testpass123')
         response = self.client.get(reverse('parties:party_update', args=[self.party.pk]))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200) # type: ignore
 
     def test_party_update_post(self):
         """Test party update via POST."""
@@ -171,7 +172,7 @@ class PartyViewsTest(TestCase):
             'process': self.process.pk,
         }
         response = self.client.post(reverse('parties:party_update', args=[self.party.pk]), data)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 302) # type: ignore
         
         self.party.refresh_from_db()
         self.assertEqual(self.party.name, 'Eduardo Amoroso Silva')
@@ -181,27 +182,27 @@ class PartyViewsTest(TestCase):
         """Test party delete view."""
         self.client.login(username='testuser', password='testpass123')
         response = self.client.get(reverse('parties:party_delete', args=[self.party.pk]))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200) # type: ignore
 
     def test_party_delete_post(self):
         """Test party deletion via POST."""
         self.client.login(username='testuser', password='testpass123')
         response = self.client.post(reverse('parties:party_delete', args=[self.party.pk]))
-        self.assertEqual(response.status_code, 302)
-        self.assertFalse(Party.objects.filter(pk=self.party.pk).exists())
+        self.assertEqual(response.status_code, 302) # type: ignore
+        self.assertFalse(Party.objects.filter(pk=self.party.pk).exists()) # type: ignore
 
     def test_search_functionality(self):
         """Test search functionality."""
         self.client.login(username='testuser', password='testpass123')
         response = self.client.get(reverse('parties:party_list'), {'search': 'Eduardo'})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200) # type: ignore
         self.assertContains(response, 'Eduardo Amoroso')
 
     def test_category_filter(self):
         """Test category filter functionality."""
         self.client.login(username='testuser', password='testpass123')
         response = self.client.get(reverse('parties:party_list'), {'category': 'EXEQUENTE'})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200) # type: ignore
         self.assertContains(response, 'Eduardo Amoroso')
 
 
@@ -213,7 +214,7 @@ class PartyFormsTest(TestCase):
         from .forms import PartyForm
         from processes.models import Process
         
-        process = Process.objects.create(
+        process = Process.objects.create( # type: ignore
             process_number='1004030-81.2016.0.00.0008',
             process_class='Execução de Título Extrajudicial',
             subject='Locação de Imóvel',
@@ -237,7 +238,7 @@ class PartyFormsTest(TestCase):
         from .forms import PartyForm
         from processes.models import Process
         
-        process = Process.objects.create(
+        process = Process.objects.create( # type: ignore
             process_number='1004030-81.2016.0.00.0008',
             process_class='Execução de Título Extrajudicial',
             subject='Locação de Imóvel',
@@ -255,14 +256,14 @@ class PartyFormsTest(TestCase):
         }
         form = PartyForm(data)
         self.assertFalse(form.is_valid())
-        self.assertIn('Document must be CPF (11 digits) or CNPJ (14 digits)', str(form.errors))
+        self.assertIn('Documento deve ser CPF (11 dígitos) ou CNPJ (14 dígitos)', str(form.errors))
 
     def test_party_form_invalid_email(self):
         """Test invalid email format."""
         from .forms import PartyForm
         from processes.models import Process
         
-        process = Process.objects.create(
+        process = Process.objects.create( # type: ignore
             process_number='1004030-81.2016.0.00.0008',
             process_class='Execução de Título Extrajudicial',
             subject='Locação de Imóvel',
@@ -280,4 +281,28 @@ class PartyFormsTest(TestCase):
         }
         form = PartyForm(data)
         self.assertFalse(form.is_valid())
-        self.assertIn('Please enter a valid email address', str(form.errors))
+        self.assertIn('Enter a valid email address.', str(form.errors))
+
+
+@pytest.mark.django_db
+def test_create_party():
+    process = Process.objects.create( # type: ignore
+        process_number="123456-78.2023.8.26.0001",
+        status="active",
+        process_type="digital",
+        process_class="Classe Teste",
+        subject="Assunto Teste",
+        judge="Juiz Teste",
+        court="Vara Teste",
+        jurisdiction="Comarca Teste",
+        district="Distrito Teste",
+        action_value=1000.00,
+    )
+    party = Party.objects.create( # type: ignore
+        name="Fulano de Tal",
+        document="123.456.789-00",
+        category="AUTOR",
+        process=process
+    )
+    assert party.process == process
+    assert party.name == "Fulano de Tal"

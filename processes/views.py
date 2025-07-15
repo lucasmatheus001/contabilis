@@ -132,7 +132,7 @@ def process_delete(request, pk):
         process_number = process.process_number
         process.delete()
         messages.success(request, f'Process {process_number} deleted successfully.')
-        return redirect('process_list')
+        return redirect('processes:process_list')
     
     context = {
         'process': process,

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Confirmar exclusão do processo</h1>
+  <form method="post">{% csrf_token %}
+    <p>Tem certeza que deseja excluir este processo?</p>
+    <button type="submit">Confirmar</button>
+    <a href="{% url 'processes:process_list' %}">Cancelar</a>
+  </form>
+{% endblock %} 
