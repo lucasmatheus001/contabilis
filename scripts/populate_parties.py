@@ -1,5 +1,7 @@
 import os
 import django
+import sys
+sys.path.append('/app')
 from random import choice
 from faker import Faker
 

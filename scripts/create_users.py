@@ -6,6 +6,7 @@ Script para criar usuários com diferentes níveis de acesso
 import os
 import sys
 import django
+sys.path.append('/app')
 
 # Configurar Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'legal_processes.settings')
