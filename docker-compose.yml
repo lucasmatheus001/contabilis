@@ -13,19 +13,25 @@ services:
   web:
     build: .
     command: >
-      sh -c "python manage.py migrate && \
-             python manage.py collectstatic --noinput && \
-             python scripts/create_users.py && \
-             python scripts/populate_parties.py && \
-             python scripts/populate_processes.py && \
-             gunicorn legal_processes.wsgi:application --bind 0.0.0.0:8000"
+      sh -c "./wait-for.sh db:5432 -- 
+        python manage.py migrate &&
+        python manage.py collectstatic --noinput &&
+        python scripts/create_users.py &&
+        python scripts/populate_processes.py &&
+        python scripts/populate_parties.py &&
+        gunicorn legal_processes.wsgi:application --bind 0.0.0.0:8000"
     volumes:
-      - .:/app
+      - .:/app:z
     ports:
       - "8000:8000"
     environment:
       - DEBUG=True
       - DATABASE_URL=postgres://postgres:postgres@db:5432/legal_processes
+      - DB_NAME=legal_processes
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
     depends_on:
       - db
 

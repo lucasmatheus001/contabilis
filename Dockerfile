@@ -11,6 +11,7 @@ WORKDIR /app
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         postgresql-client \
+        netcat-openbsd \
         build-essential \
         libpq-dev \
     && rm -rf /var/lib/apt/lists/*
@@ -25,4 +26,4 @@ COPY . .
 # O collectstatic no entrypoint/comando do container
 
 # Run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "legal_processes.wsgi:application"] 
+CMD ["gunicorn", "legal_processes.wsgi:application", "--bind", "0.0.0.0:8000"] 
