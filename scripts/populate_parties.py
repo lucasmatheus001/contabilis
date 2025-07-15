@@ -23,6 +23,10 @@ def random_document():
     else:
         return fake.cnpj()
 
+if Party.objects.exists():
+    print('Já existem partes cadastradas. Nada foi feito.')
+    exit(0)
+
 processos = list(Process.objects.all())
 if not processos:
     print('Nenhum processo encontrado. Execute o script de processos antes.')
