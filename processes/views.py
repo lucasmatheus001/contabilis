@@ -13,6 +13,7 @@ from openpyxl.styles import Font, Alignment
 from .models import Process
 from .forms import ProcessForm
 import datetime
+from django.core.exceptions import PermissionDenied
 
 
 def remove_tz(dt):
@@ -99,10 +100,12 @@ def process_create(request):
 
 
 @login_required
-@permission_required('processes.change_process', raise_exception=True)
 def process_update(request, pk):
     """Update an existing process."""
     process = get_object_or_404(Process, pk=pk)
+    if not request.user.has_perm('processes.change_process'):
+        messages.error(request, 'Você não tem permissão para editar este processo.')
+        return redirect('processes:process_list')
     
     if request.method == 'POST':
         form = ProcessForm(request.POST, instance=process)
@@ -123,10 +126,12 @@ def process_update(request, pk):
 
 
 @login_required
-@permission_required('processes.delete_process', raise_exception=True)
 def process_delete(request, pk):
     """Delete a process."""
     process = get_object_or_404(Process, pk=pk)
+    if not request.user.has_perm('processes.delete_process'):
+        messages.error(request, 'Você não tem permissão para excluir este processo.')
+        return redirect('processes:process_list')
     
     if request.method == 'POST':
         process_number = process.process_number
